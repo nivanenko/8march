@@ -62,19 +62,27 @@ output = output.replace(
 
 output = output.replace(
   `  openBtn.addEventListener('click', function() {
-    if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
-      dateError.classList.remove('visible');
-      window.scrollTo(0, 0);
-      document.getElementById('cover').classList.add('opened');
-      document.body.classList.remove('cover-visible');
-      setTimeout(runReveal, 400);
-    } else {
-      dateError.classList.add('visible');
-      dateSelects.classList.add('shake');
-      setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);
-    }
+    openBtn.textContent = 'Открываю\u2026';
+    openBtn.classList.add('loading');
+    setTimeout(function() {
+      if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
+        dateError.classList.remove('visible');
+        window.scrollTo(0, 0);
+        document.getElementById('cover').classList.add('opened');
+        document.body.classList.remove('cover-visible');
+        setTimeout(runReveal, 400);
+      } else {
+        openBtn.textContent = 'Открыть';
+        openBtn.classList.remove('loading');
+        dateError.classList.add('visible');
+        dateSelects.classList.add('shake');
+        setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);
+      }
+    }, 50);
   });`,
   `  openBtn.addEventListener('click', async function() {
+    openBtn.textContent = 'Открываю\u2026';
+    openBtn.classList.add('loading');
     var dateStr = selDay.value.padStart(2, '0') + '-' + selMonth.value.padStart(2, '0') + '-' + selYear.value;
     try {
       var html = await decryptCard(dateStr);
@@ -86,6 +94,8 @@ output = output.replace(
       document.body.classList.remove('cover-visible');
       setTimeout(runReveal, 400);
     } catch(e) {
+      openBtn.textContent = 'Открыть';
+      openBtn.classList.remove('loading');
       dateError.classList.add('visible');
       dateSelects.classList.add('shake');
       setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);

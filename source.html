@@ -163,6 +163,17 @@
     .date-open-btn:active { transform: translateY(0); }
     .date-open-btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
 
+    .date-open-btn.loading {
+      pointer-events: none;
+      background-size: 200% 100%;
+      animation: btn-shimmer 1.2s ease-in-out infinite;
+    }
+
+    @keyframes btn-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
     .date-error {
       font-family: 'Spectral', Georgia, serif;
       font-style: italic;
@@ -1019,17 +1030,23 @@
   selYear.addEventListener('change', checkFilled);
 
   openBtn.addEventListener('click', function() {
-    if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
-      dateError.classList.remove('visible');
-      window.scrollTo(0, 0);
-      document.getElementById('cover').classList.add('opened');
-      document.body.classList.remove('cover-visible');
-      setTimeout(runReveal, 400);
-    } else {
-      dateError.classList.add('visible');
-      dateSelects.classList.add('shake');
-      setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);
-    }
+    openBtn.textContent = 'Открываю\u2026';
+    openBtn.classList.add('loading');
+    setTimeout(function() {
+      if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
+        dateError.classList.remove('visible');
+        window.scrollTo(0, 0);
+        document.getElementById('cover').classList.add('opened');
+        document.body.classList.remove('cover-visible');
+        setTimeout(runReveal, 400);
+      } else {
+        openBtn.textContent = 'Открыть';
+        openBtn.classList.remove('loading');
+        dateError.classList.add('visible');
+        dateSelects.classList.add('shake');
+        setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);
+      }
+    }, 50);
   });
 
 })();
