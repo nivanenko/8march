@@ -62,7 +62,7 @@ output = output.replace(
 
 output = output.replace(
   `  openBtn.addEventListener('click', function() {
-    openBtn.textContent = 'Открываю\u2026';
+    openBtn.textContent = 'Открываю\\u2026';
     openBtn.classList.add('loading');
     setTimeout(function() {
       if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
@@ -81,7 +81,7 @@ output = output.replace(
     }, 50);
   });`,
   `  openBtn.addEventListener('click', async function() {
-    openBtn.textContent = 'Открываю\u2026';
+    openBtn.textContent = 'Открываю\\u2026';
     openBtn.classList.add('loading');
     var dateStr = selDay.value.padStart(2, '0') + '-' + selMonth.value.padStart(2, '0') + '-' + selYear.value;
     try {
