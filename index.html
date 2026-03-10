@@ -51,6 +51,8 @@
       min-height: 100dvh;
     }
 
+    body.cover-visible { overflow: hidden; }
+
     .cover {
       position: fixed;
       inset: 0;
@@ -302,7 +304,7 @@
     .polaroid {
       display: inline-block;
       background: #fffdf8;
-      padding: 10px 10px 40px;
+      padding: 14px 14px 50px;
       border-radius: 4px;
       box-shadow: 0 4px 20px -4px rgba(61,43,51,0.15), 0 1px 4px rgba(0,0,0,0.06);
       transform: rotate(-2deg);
@@ -312,8 +314,10 @@
     .polaroid:hover { transform: rotate(0deg) scale(1.02); }
 
     .polaroid img {
-      width: 200px;
-      height: 200px;
+      width: 400px;
+      height: auto;
+      aspect-ratio: 1;
+      max-width: 100%;
       object-fit: cover;
       border-radius: 2px;
       display: block;
@@ -321,7 +325,7 @@
 
     .polaroid-caption {
       font-family: 'Bad Script', cursive;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       color: var(--text-muted);
       margin-top: 10px;
       line-height: 1.3;
@@ -418,8 +422,8 @@
       .signature .name { font-size: 2.8rem; }
       .ornament-line { width: 45px; }
       .bouquet-wrap svg { width: 300px; }
-      .polaroid img { width: 170px; height: 170px; }
-      .polaroid-caption { font-size: 1.15rem; }
+      .polaroid img { width: 340px; height: 340px; max-width: 100%; }
+      .polaroid-caption { font-size: 1.3rem; }
     }
 
     @media (max-width: 380px) {
@@ -435,9 +439,9 @@
       .poem-line { font-size: 1.4rem; }
       .message p { font-size: 1.3rem; }
       .bouquet-wrap svg { width: 260px; }
-      .polaroid img { width: 150px; height: 150px; }
-      .polaroid-caption { font-size: 1.05rem; }
-      .polaroid { padding: 8px 8px 32px; }
+      .polaroid img { width: 300px; height: 300px; max-width: 100%; }
+      .polaroid-caption { font-size: 1.15rem; }
+      .polaroid { padding: 10px 10px 40px; }
     }
 
     @media (min-height: 900px) {
@@ -451,7 +455,7 @@
     }
   </style>
 </head>
-<body>
+<body class="cover-visible">
 
 <div class="cover" id="cover">
   <div class="cover-eight">8</div>
@@ -539,7 +543,7 @@
     <div class="childhood-wrap" id="childhood">
       <div class="polaroid">
         <img src="child.jpg" alt="">
-        <p class="polaroid-caption">очень долго искал фото,<br>на котором я веселый</p>
+        <p class="polaroid-caption">Очень долго искал фото,<br>на котором я веселый</p>
       </div>
     </div>
 
@@ -896,7 +900,9 @@
   }
 
   document.getElementById('cover').addEventListener('click', function() {
+    window.scrollTo(0, 0);
     this.classList.add('opened');
+    document.body.classList.remove('cover-visible');
     setTimeout(runReveal, 400);
   });
 
