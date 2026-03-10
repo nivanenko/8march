@@ -63,7 +63,6 @@
       align-items: center;
       justify-content: center;
       background: linear-gradient(160deg, #f8f0e8 0%, #f5ebe0 40%, #fae8ef 100%);
-      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
@@ -96,14 +95,95 @@
       margin-top: 0.5rem;
     }
 
-    .cover-tap {
+    .date-gate {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .date-gate-label {
       font-family: 'Spectral', Georgia, serif;
       font-style: italic;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: var(--text-soft);
-      margin-top: 3rem;
-      animation: pulse-soft 2s ease-in-out infinite;
     }
+
+    .date-selects {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .date-selects select {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      background: white;
+      border: 1px solid rgba(212,132,155,0.25);
+      border-radius: 0.5rem;
+      padding: 0.55rem 0.75rem;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23927e88' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      padding-right: 2rem;
+    }
+
+    .date-selects select:focus {
+      border-color: var(--rose-400);
+      box-shadow: 0 0 0 3px rgba(200,132,155,0.12);
+    }
+
+    .date-selects select.has-value { color: var(--text-primary); }
+    .date-selects select:not(.has-value) { color: var(--text-soft); }
+
+    .date-open-btn {
+      font-family: 'Oranienbaum', serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: white;
+      background: linear-gradient(135deg, var(--rose-400), var(--rose-500));
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.7rem 2.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 2px 12px -2px rgba(168,80,112,0.3);
+      margin-top: 0.3rem;
+    }
+
+    .date-open-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px -2px rgba(168,80,112,0.4); }
+    .date-open-btn:active { transform: translateY(0); }
+    .date-open-btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+
+    .date-error {
+      font-family: 'Spectral', Georgia, serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--rose-500);
+      opacity: 0;
+      transition: opacity 0.3s;
+      min-height: 1.4rem;
+    }
+
+    .date-error.visible { opacity: 1; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .date-selects.shake { animation: shake 0.4s ease; }
 
     @keyframes pulse-soft {
       0%, 100% { opacity: 0.6; }
@@ -413,6 +493,8 @@
       .sparkles { border-radius: 2rem; }
       .cover-eight { font-size: 9rem; }
       .cover-subtitle { font-size: 2rem; }
+      .date-selects select { font-size: 0.95rem; padding: 0.5rem 0.6rem; padding-right: 1.8rem; }
+      .date-open-btn { font-size: 1.05rem; padding: 0.6rem 2rem; }
       .eight { font-size: 8.5rem; }
       .subtitle { font-size: 2rem; letter-spacing: 0.25em; }
       .photo { width: 170px; height: 170px; }
@@ -430,6 +512,8 @@
     @media (max-width: 380px) {
       .cover-eight { font-size: 7rem; }
       .cover-subtitle { font-size: 1.6rem; }
+      .date-selects { gap: 0.35rem; }
+      .date-selects select { font-size: 0.9rem; padding: 0.45rem 0.5rem; padding-right: 1.6rem; }
       .photo { width: 140px; height: 140px; }
       .card { padding: 2.5rem 1.3rem 2rem; border-radius: 1.5rem; }
       .card::before { border-radius: 1.5rem; }
@@ -461,7 +545,16 @@
 <div class="cover" id="cover">
   <div class="cover-eight">8</div>
   <div class="cover-subtitle">Марта</div>
-  <p class="cover-tap">Нажми, чтобы открыть</p>
+  <div class="date-gate">
+    <p class="date-gate-label">День рождения Назара</p>
+    <div class="date-selects" id="date-selects">
+      <select id="sel-day"><option value="">День</option></select>
+      <select id="sel-month"><option value="">Месяц</option></select>
+      <select id="sel-year"><option value="">Год</option></select>
+    </div>
+    <button class="date-open-btn" id="date-open-btn" disabled>Открыть</button>
+    <p class="date-error" id="date-error">Неправильная дата</p>
+  </div>
 </div>
 
 <div class="bg-layer"></div>
@@ -900,11 +993,41 @@
       .call(launchConfetti);
   }
 
-  document.getElementById('cover').addEventListener('click', function() {
-    window.scrollTo(0, 0);
-    this.classList.add('opened');
-    document.body.classList.remove('cover-visible');
-    setTimeout(runReveal, 400);
+  var selDay = document.getElementById('sel-day');
+  var selMonth = document.getElementById('sel-month');
+  var selYear = document.getElementById('sel-year');
+  var openBtn = document.getElementById('date-open-btn');
+  var dateError = document.getElementById('date-error');
+  var dateSelects = document.getElementById('date-selects');
+
+  for (var d = 1; d <= 31; d++) selDay.appendChild(new Option(d, d));
+  var months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  for (var m = 0; m < 12; m++) selMonth.appendChild(new Option(months[m], m + 1));
+  for (var y = 1980; y <= 2005; y++) selYear.appendChild(new Option(y, y));
+
+  function checkFilled() {
+    var filled = selDay.value && selMonth.value && selYear.value;
+    openBtn.disabled = !filled;
+    [selDay, selMonth, selYear].forEach(function(s) {
+      s.classList.toggle('has-value', !!s.value);
+    });
+  }
+  selDay.addEventListener('change', checkFilled);
+  selMonth.addEventListener('change', checkFilled);
+  selYear.addEventListener('change', checkFilled);
+
+  openBtn.addEventListener('click', function() {
+    if (selDay.value === '11' && selMonth.value === '8' && selYear.value === '1995') {
+      dateError.classList.remove('visible');
+      window.scrollTo(0, 0);
+      document.getElementById('cover').classList.add('opened');
+      document.body.classList.remove('cover-visible');
+      setTimeout(runReveal, 400);
+    } else {
+      dateError.classList.add('visible');
+      dateSelects.classList.add('shake');
+      setTimeout(function() { dateSelects.classList.remove('shake'); }, 400);
+    }
   });
 
 })();
