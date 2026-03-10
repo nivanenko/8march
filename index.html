@@ -292,6 +292,41 @@
       color: var(--text-muted);
     }
 
+    .childhood-wrap {
+      text-align: center;
+      margin-top: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px) rotate(0deg);
+    }
+
+    .polaroid {
+      display: inline-block;
+      background: #fffdf8;
+      padding: 10px 10px 40px;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px -4px rgba(61,43,51,0.15), 0 1px 4px rgba(0,0,0,0.06);
+      transform: rotate(-2deg);
+      transition: transform 0.4s ease;
+    }
+
+    .polaroid:hover { transform: rotate(0deg) scale(1.02); }
+
+    .polaroid img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+    }
+
+    .polaroid-caption {
+      font-family: 'Bad Script', cursive;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+      line-height: 1.3;
+    }
+
     .signature { text-align: center; margin-top: 2.5rem; opacity: 0; transform: translateY(20px); }
 
     .signature .with-love {
@@ -383,6 +418,8 @@
       .signature .name { font-size: 2.8rem; }
       .ornament-line { width: 45px; }
       .bouquet-wrap svg { width: 300px; }
+      .polaroid img { width: 170px; height: 170px; }
+      .polaroid-caption { font-size: 1.15rem; }
     }
 
     @media (max-width: 380px) {
@@ -398,6 +435,9 @@
       .poem-line { font-size: 1.4rem; }
       .message p { font-size: 1.3rem; }
       .bouquet-wrap svg { width: 260px; }
+      .polaroid img { width: 150px; height: 150px; }
+      .polaroid-caption { font-size: 1.05rem; }
+      .polaroid { padding: 8px 8px 32px; }
     }
 
     @media (min-height: 900px) {
@@ -494,6 +534,13 @@
         даже самые безумные. Спасибо, что смеялась,
         а не ругала. Спасибо, что ты — это ты.
       </p>
+    </div>
+
+    <div class="childhood-wrap" id="childhood">
+      <div class="polaroid">
+        <img src="child.jpg" alt="">
+        <p class="polaroid-caption">очень долго искал фото,<br>на котором я веселый</p>
+      </div>
     </div>
 
     <div class="signature" id="signature">
@@ -799,7 +846,7 @@
 
     if (!hasGsap) {
       document.getElementById('card').style.cssText = 'opacity:1;transform:none';
-      document.querySelectorAll('.eight,.subtitle,.ornament,.photo-wrap,.greeting,.stanza,.message,.signature,.bouquet-wrap,.date-stamp').forEach(function(el) {
+      document.querySelectorAll('.eight,.subtitle,.ornament,.photo-wrap,.greeting,.stanza,.message,.childhood-wrap,.signature,.bouquet-wrap,.date-stamp').forEach(function(el) {
         el.style.cssText = 'opacity:1;transform:none';
       });
       document.getElementById('eight-glow').style.opacity = '0.6';
@@ -840,7 +887,9 @@
       .to('#orn2', { opacity: 1, duration: 0.4 }, '+=0.05')
       .fromTo('#orn2 .ornament-line', { width: 0 }, { width: isMobile ? 45 : 60, duration: 0.5 }, '-=0.25')
       .to('#message', { opacity: 1, y: 0, duration: 0.6 }, '-=0.1')
-      .to('#signature', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .to('#childhood', { opacity: 1, y: 0, duration: 0.7, ease: 'back.out(1.3)' }, '+=0.1')
+      .fromTo('#childhood .polaroid', { rotation: -8, scale: 0.85 }, { rotation: -2, scale: 1, duration: 0.6, ease: 'back.out(1.5)' }, '-=0.5')
+      .to('#signature', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
       .to('#date-stamp', { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
       .to('#bouquet', { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.3)' }, '-=0.2')
       .call(launchConfetti);
